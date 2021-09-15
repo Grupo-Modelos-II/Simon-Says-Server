@@ -1,30 +1,17 @@
-import databaseClient from '../util/database';
+export class PlayerEntity {
+    
+    id_user:number;
+    name: string;
+    pass: string;
+    max_score: number;
 
-export class Player {
-    name: string | undefined;
-    password: string | undefined;
-    max_score: number | undefined;
-
+    public constructor({id_user,name,pass,max_score}:any){
+        this.id_user = id_user;
+        this.name = name;
+        this.pass = pass;
+        this.max_score = max_score;
+    }
 };
 
-const table: string = 'Player';
 
-export const getPlayer = async (id: number): Promise<Player> => {
-    return (await databaseClient.get(table, id)) as Player;
-};
 
-export const getPlayers = async (): Promise<Player[]> => {
-    return (await databaseClient.getAll(table)) as Player[];
-};
-
-export const createPlayer = async (player: Player): Promise<Player> => {
-    return (await databaseClient.create(table, player)) as Player;
-};
-
-export const updatePlayer = async (player: Player): Promise<Player> => {
-    return (await databaseClient.update(table, player)) as Player;
-};
-
-export const deletePlayer = async (id: number): Promise<Player> => {
-    return (await databaseClient.delete(table, id)) as Player;
-};
