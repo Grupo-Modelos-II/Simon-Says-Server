@@ -1,6 +1,11 @@
 import databaseClient from '../util/database';
 
-class Player {};
+export class Player {
+    name: string | undefined;
+    password: string | undefined;
+    max_score: number | undefined;
+
+};
 
 const table: string = 'Player';
 
