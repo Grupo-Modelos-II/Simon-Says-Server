@@ -1,3 +1,5 @@
+DROP Player IF EXISTS;
+
 create table Player(
     id_user varchar not null,
     name varchar not null,
@@ -7,12 +9,16 @@ create table Player(
 
 alter table Player add constraint pk_user primary key(id_user);
 
+DROP Game IF EXISTS;
+
 create table Game(
     id_game varchar not null,
     score bigint not null
 );
 
 alter table Game add constraint pk_game primary key(id_game);
+
+DROP History IF EXISTS;
 
 create table History(
     id_user varchar not null,
