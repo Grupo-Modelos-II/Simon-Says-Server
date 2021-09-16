@@ -1,24 +1,23 @@
 import { Router,Response,Request } from 'express';
-import { PlayerRequestDto } from '../dto/PlayerRequestDto';
 import { PlayerRepository } from '../repository/PlayerRepository';
 import { PlayerEntity } from '../entity/player';
+import { playerEntityMiddleware } from '../middlewares/player';
 
 const playerRepository:PlayerRepository = new PlayerRepository();
 const playerController: Router = Router();
 
-playerController.get('/', (_: Request, response:Response) => {
-    playerRepository.getPlayers().then((res:PlayerEntity[]) => {
+playerController.get('/', (request: Request, response:Response) => {
+    playerRepository.getPlayer(request.query.id_user as string).then((res:PlayerEntity) => {
         response.status(200).json(res);
     }).catch((error:any) => {
         response.status(400).json(error);
     });
 });
 
-playerController.post('/create',({body}: {body: PlayerRequestDto},response:Response) => {
-    playerRepository.createPlayer(body).then((res:PlayerEntity) => {
+playerController.post('/create',playerEntityMiddleware,(request:any,response:Response) => {
+    playerRepository.createPlayer(request.playerData).then((res:PlayerEntity) => {
         response.status(200).json(res);
     }).catch((error:any) => {
-        console.log(error);
         response.status(400).json(error);
     });
 });
