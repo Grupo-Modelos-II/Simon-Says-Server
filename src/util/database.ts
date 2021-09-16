@@ -11,7 +11,7 @@ const databaseConfigurations = {
 
 const database: DatabaseManager = new DatabaseManager(databaseConfigurations);
 const databaseClient = database.setKeyTables([{
-    primaryKey: 'id',
+    primaryKey: 'id_user',
     table: 'Player',
 }]);
 
