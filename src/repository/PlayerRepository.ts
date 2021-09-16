@@ -6,7 +6,7 @@ export class PlayerRepository{
 
     private table: string = 'Player';
 
-    public async getPlayer(id: number): Promise<PlayerEntity>{
+    public async getPlayer(id: string): Promise<PlayerEntity>{
         return (await databaseClient.get(this.table, id)) as PlayerEntity;
     };
     
@@ -14,9 +14,8 @@ export class PlayerRepository{
         return (await databaseClient.getAll(this.table)) as PlayerEntity[];
     };
     
-   public async createPlayer (player: PlayerRequestDto): Promise<PlayerEntity>  {
-       let playerData:PlayerEntity = new PlayerEntity({id_user:Date.now(),...player});
-       return (await databaseClient.create(this.table, playerData)) as PlayerEntity;
+   public async createPlayer (player: PlayerEntity): Promise<PlayerEntity>  {
+       return (await databaseClient.create(this.table, player)) as PlayerEntity;
     };
     
    public async updatePlayer  (player: PlayerEntity): Promise<PlayerEntity>  {
