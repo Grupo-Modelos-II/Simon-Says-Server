@@ -1,10 +1,13 @@
 import databaseClient from '../util/database';
 import { PlayerEntity } from '../entity/player';
-import { PlayerRequestDto } from '../dto/PlayerRequestDto';
-
 export class PlayerRepository{
 
     private table: string = 'Player';
+
+    public async getPlayerByUserName(username:string):Promise<PlayerEntity>{
+        let data:any = await databaseClient.customQuery('SELECT * FROM player where name=$1',[username]);
+        return new PlayerEntity({...data[0]});
+    }
 
     public async getPlayer(id: string): Promise<PlayerEntity>{
         return (await databaseClient.get(this.table, id)) as PlayerEntity;
