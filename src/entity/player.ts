@@ -4,12 +4,14 @@ export class PlayerEntity {
     private name: string;
     private pass: string;
     private max_score: number;
+    private token_session:string;
 
-    public constructor({id_user,name,pass,max_score}:any){
+    public constructor({id_user,name,pass,max_score,token_session}:any){
         this.id_user = id_user;
         this.name = name;
         this.pass = pass;
         this.max_score = max_score;
+        this.token_session = token_session;
     }
 
     public setIdUser(id_user:number):void{
@@ -42,6 +44,14 @@ export class PlayerEntity {
 
     public getMaxScore():number{
         return this.max_score;
+    }
+
+    public setTokenSession(token_session:string):void{
+        this.token_session = token_session;
+    }
+
+    public getTokenSession():string{
+        return this.token_session;
     }
 };
 
