@@ -1,8 +1,9 @@
-import express, { Express, Request, Response } from 'express';
+import express, { Express } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 
 import playerController from '../controller/PlayerController';
+import authController from '../controller/AuthController';
 
 const app: Express = express();
 
@@ -13,5 +14,6 @@ app.use(cors());
 
 //Router confug
 app.use('/player',playerController);
+app.use('/auth',authController);
 
 export default app;
