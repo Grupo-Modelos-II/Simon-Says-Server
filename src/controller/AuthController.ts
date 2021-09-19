@@ -13,7 +13,7 @@ authController.post('/', async (request: Request, response:Response) => {
 
     let userData:PlayerEntity = await playerRepository.getPlayerByUserName(username);
     
-    let verifiedPassword:boolean = (userData === undefined)? false : await verifyPassword(password,userData.getPass());
+    let verifiedPassword:boolean = (!userData.getIdUser())? false : await verifyPassword(password,userData.getPass());
 
     if(verifiedPassword){
         const token:string = await authorizedUserProfile({id_user:userData.getIdUser()});

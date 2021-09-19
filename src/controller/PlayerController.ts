@@ -12,7 +12,7 @@ playerController.post('/',playerCreationMiddleware,(request:Request,response:Res
     playerRepository.createPlayer(request.body.playerData).then((res:PlayerEntity) => {
         responseData.setSuccesQuery({
             userData:res,
-            message:'Usuario creado de exitosamente'
+            message:'Usuario creado exitosamente'
         });
         response.status(200).json(responseData);
     }).catch((error:any) => {
