@@ -30,4 +30,8 @@ export class PlayerRepository{
    public async deletePlayer  (id: number): Promise<PlayerEntity>  {
         return new PlayerEntity({...(await databaseClient.delete(this.table, id))});
     };
+
+    public async getRank(): Promise<PlayerEntity[]> {
+        return (await databaseClient.customQuery('SELECT * FROM Player ORDER BY max_score DESC;'));
+    };
 }

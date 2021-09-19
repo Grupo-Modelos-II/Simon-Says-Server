@@ -65,4 +65,24 @@ playerController.put('/',playerAuthenticationMiddleware, playerVerificationMiddl
     });
 });
 
+playerController.get('/rank', async (request: Request, response:Response) => {
+    const apiResponse:APIResponse = new APIResponse();
+    const rank: any[] = await playerRepository.getRank();
+    let code: number = 0;
+    if(rank.length) {
+        apiResponse.setSuccesQuery({
+            rank:rank,
+            message:'Lista de jugadores'
+        });
+        code = 200;
+    } else {
+        apiResponse.setFailQuery({
+            rank:null,
+            message:'No se encontraron jugadores'
+        });
+        code = 404;
+    }
+    response.status(code).json(apiResponse);
+});
+
 export default playerController;

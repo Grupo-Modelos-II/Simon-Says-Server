@@ -2,6 +2,8 @@ import { Response, Request } from 'express';
 import { PlayerEntity } from '../entity/player';
 import { decodePayload, encodePass } from '../util/securityParser';
 
+import { APIResponse } from '../dto/APIResponsedto';
+
 export const playerCreationMiddleware = async (request:Request, response:Response,next:any):Promise<void> => {
     let playerData:PlayerEntity = new PlayerEntity({id_user:`player_${Date.now()}`,...request.body});
     playerData.setPass(await encodePass(playerData.getPass()));
@@ -10,6 +12,7 @@ export const playerCreationMiddleware = async (request:Request, response:Respons
 }
 
 export const playerAuthenticationMiddleware = async (request:Request,response:Response,next:any):Promise<void> => {
+    const apiResponse: APIResponse = new APIResponse();
     const token = request.headers.authorization || '';
     try {
         const {id_user, exp} = await decodePayload(token.split(' ')[1]);
@@ -22,7 +25,8 @@ export const playerAuthenticationMiddleware = async (request:Request,response:Re
             next();
         }
     } catch (error) {
-        response.status(401).json({message:'Invalid token'});
+        apiResponse.setFailQuery({message:'Invalid token', isAuthorized: false});
+        response.status(401).json(apiResponse);
     }
 }
 

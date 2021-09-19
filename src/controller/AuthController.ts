@@ -18,8 +18,6 @@ authController.post('/', async (request: Request, response:Response) => {
 
     if(verifiedPassword){
         const token:string = await authorizedUserProfile({id_user:userData.getIdUser()});
-        userData.setTokenSession(token);
-        await playerRepository.updatePlayer(userData);
         responseData.setSuccesQuery({
             token
         });
