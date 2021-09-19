@@ -5,7 +5,7 @@ import { PlayerEntity } from '../entity/player';
 import { verifyPassword,authorizedUserProfile } from '../util/securityParser';
 
 let authController:Router = Router();
-let playerRepository:PlayerRepository = new PlayerRepository();
+let playerRepository:PlayerRepository = PlayerRepository.playerRepository;
 
 authController.post('/', async (request: Request, response:Response) => {
     let responseData:APIResponse = new APIResponse();

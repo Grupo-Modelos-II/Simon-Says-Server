@@ -2,7 +2,13 @@ import databaseClient from '../util/database';
 import { PlayerEntity } from '../entity/player';
 export class PlayerRepository{
 
+    private constructor() {}
+
     private table: string = 'Player';
+
+    private static _playerRepository = new PlayerRepository();
+
+    public static get playerRepository() {return PlayerRepository._playerRepository;}
 
     public async getPlayerByUserName(username:string):Promise<PlayerEntity>{
         let data:any = await databaseClient.customQuery('SELECT * FROM player where name=$1',[username]);
@@ -10,22 +16,18 @@ export class PlayerRepository{
     }
 
     public async getPlayer(id: string): Promise<PlayerEntity>{
-        return (await databaseClient.get(this.table, id)) as PlayerEntity;
+        return new PlayerEntity({...(await databaseClient.get(this.table, id))});
     };
     
-    public async getPlayers():Promise<PlayerEntity[]> {
-        return (await databaseClient.getAll(this.table)) as PlayerEntity[];
+   public async createPlayer(player: PlayerEntity): Promise<PlayerEntity>  {
+       return new PlayerEntity({...(await databaseClient.create(this.table, player))});
     };
     
-   public async createPlayer (player: PlayerEntity): Promise<PlayerEntity>  {
-       return (await databaseClient.create(this.table, player)) as PlayerEntity;
-    };
-    
-   public async updatePlayer  (player: PlayerEntity): Promise<PlayerEntity>  {
-        return (await databaseClient.update(this.table, player)) as PlayerEntity;
+   public async updatePlayer(player: PlayerEntity): Promise<PlayerEntity>  {
+        return new PlayerEntity({...(await databaseClient.update(this.table, player))});
     };
     
    public async deletePlayer  (id: number): Promise<PlayerEntity>  {
-        return (await databaseClient.delete(this.table, id)) as PlayerEntity;
+        return new PlayerEntity({...(await databaseClient.delete(this.table, id))});
     };
 }

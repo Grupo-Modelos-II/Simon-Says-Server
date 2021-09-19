@@ -2,14 +2,14 @@ import { Router,Response,Request } from 'express';
 import { PlayerRepository } from '../repository/PlayerRepository';
 import { APIResponse } from '../dto/APIResponsedto';
 import { PlayerEntity } from '../entity/player';
-import { playerCreationMiddleware,playerAuthenticationMiddleware } from '../middlewares/player';
+import { playerCreationMiddleware,playerAuthenticationMiddleware, playerVerificationMiddleware } from '../middlewares/player';
 
-const playerRepository:PlayerRepository = new PlayerRepository();
+const playerRepository:PlayerRepository = PlayerRepository.playerRepository;
 const playerController: Router = Router();
 
-playerController.post('/',playerCreationMiddleware,(request:any,response:Response) => {
+playerController.post('/',playerCreationMiddleware,(request:Request,response:Response) => {
     let responseData:APIResponse = new APIResponse();
-    playerRepository.createPlayer(request.playerData).then((res:PlayerEntity) => {
+    playerRepository.createPlayer(request.body.playerData).then((res:PlayerEntity) => {
         responseData.setSuccesQuery({
             userData:res,
             message:'Usuario creado de exitosamente'
@@ -24,10 +24,21 @@ playerController.post('/',playerCreationMiddleware,(request:any,response:Respons
     });
 });
 
-playerController.put('/',playerAuthenticationMiddleware,({body}:{body:PlayerEntity},response:Response) => {
+playerController.put('/',playerAuthenticationMiddleware, playerVerificationMiddleware,({body}:{body:PlayerEntity},response:Response) => {
     let responseData:APIResponse = new APIResponse();
-    response.send('Holas');
-    //playerRepository.updatePlayer();
+    playerRepository.updatePlayer(body).then((res:PlayerEntity) => {
+        responseData.setSuccesQuery({
+            userData:res,
+            message:'Usuario actualizado de exitosamente'
+            });
+        response.status(200).json(responseData);
+    }).catch((error:any) => {
+        responseData.setFailQuery({
+            err:error,
+            message:'Error al actualizar usuario'
+        });
+        response.status(400).json(responseData);
+    });
 });
 
 export default playerController;
