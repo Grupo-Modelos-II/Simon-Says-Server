@@ -3,6 +3,7 @@ import { APIResponse } from '../dto/APIResponsedto';
 import { PlayerRepository } from '../repository/PlayerRepository';
 import { PlayerEntity } from '../entity/player';
 import { verifyPassword,authorizedUserProfile } from '../util/securityParser';
+import { playerAuthenticationMiddleware } from '../middlewares/player';
 
 let authController:Router = Router();
 let playerRepository:PlayerRepository = PlayerRepository.playerRepository;
@@ -31,6 +32,13 @@ authController.post('/', async (request: Request, response:Response) => {
     }
 });
 
+authController.get('/',playerAuthenticationMiddleware,(_,response:Response) => {
+    let responseData:APIResponse = new APIResponse();
+    responseData.setSuccesQuery({
+        isAuthorized:true
+    });
+    response.status(200).json(responseData);
+});
 
 
 

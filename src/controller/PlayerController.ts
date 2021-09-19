@@ -7,6 +7,30 @@ import { playerCreationMiddleware,playerAuthenticationMiddleware, playerVerifica
 const playerRepository:PlayerRepository = PlayerRepository.playerRepository;
 const playerController: Router = Router();
 
+playerController.get('/',playerAuthenticationMiddleware,(request: Request, response:Response) => {
+    let responseData:APIResponse = new APIResponse();
+    playerRepository.getPlayer(request.body.id_user).then((res:PlayerEntity) => {
+        if(res.getIdUser() !== undefined){
+            responseData.setSuccesQuery({
+                userData:res,
+            });
+            response.status(200).json(responseData);
+        }else{
+            responseData.setFailQuery({
+                userData:null,
+                message:'No se encontro información del usuario'
+            });
+            response.status(404).json(responseData);
+        }
+    }).catch((error:any) => {
+        responseData.setFailQuery({
+            error:error,
+            message:'Ha ocurrido un error al traer la información'
+        });
+        response.status(500).json(responseData);
+    });
+});
+
 playerController.post('/',playerCreationMiddleware,(request:Request,response:Response) => {
     let responseData:APIResponse = new APIResponse();
     playerRepository.createPlayer(request.body.playerData).then((res:PlayerEntity) => {

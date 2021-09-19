@@ -1,9 +1,6 @@
 import { Response, Request } from 'express';
 import { PlayerEntity } from '../entity/player';
-import { PlayerRepository } from '../repository/PlayerRepository';
 import { decodePayload, encodePass } from '../util/securityParser';
-
-let playerRepository:PlayerRepository = PlayerRepository.playerRepository;
 
 export const playerCreationMiddleware = async (request:Request, response:Response,next:any):Promise<void> => {
     let playerData:PlayerEntity = new PlayerEntity({id_user:`player_${Date.now()}`,...request.body});
@@ -30,7 +27,7 @@ export const playerAuthenticationMiddleware = async (request:Request,response:Re
 }
 
 export const playerVerificationMiddleware = async (request:Request,response:Response,next:any):Promise<void> => {
-    const {id_user, pass} = request.body;
+    const { pass } = request.body;
     if(typeof pass === 'string') {
         request.body.pass = await encodePass(pass);
     } else {
