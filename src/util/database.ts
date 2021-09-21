@@ -1,11 +1,11 @@
 import { DatabaseManager } from 'database-manager-lib';
 
 const databaseConfigurations = {
-    client: 'postgres',
+    client: 'mongo',
     database: process.env.DB_NAME || '',
     host: 'localhost',
     password: process.env.DB_PASSWORD || '',
-    port: 5432,
+    port: 27017,
     user: process.env.DB_USER || '',
 };
 

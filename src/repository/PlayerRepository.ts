@@ -11,8 +11,8 @@ export class PlayerRepository{
     public static get playerRepository() {return PlayerRepository._playerRepository;}
 
     public async getPlayerByUserName(username:string):Promise<PlayerEntity>{
-        let data:any = await databaseClient.customQuery('SELECT * FROM player where name=$1',[username]);
-        return new PlayerEntity({...data[0]});
+        let data:any = await (await databaseClient.customQuery('Player')).findOne({name: username});
+        return new PlayerEntity({...data});
     }
 
     public async getPlayer(id: string): Promise<PlayerEntity>{
@@ -32,6 +32,6 @@ export class PlayerRepository{
     };
 
     public async getRank(): Promise<PlayerEntity[]> {
-        return (await databaseClient.customQuery('SELECT * FROM Player ORDER BY max_score DESC;'));
+        return (await (await databaseClient.customQuery('Player')).find().sort({max_score: -1})).toArray();//.sort({max_score: -1});
     };
 }
